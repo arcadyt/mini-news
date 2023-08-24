@@ -16,7 +16,6 @@ public interface NewsItemRepository extends JpaRepository<NewsItem, Long> {
     @Query(value = "UPDATE news_item n SET n.votes = n.votes + 1, n.version = n.version + 1 WHERE n.id = :newsId AND n.version = :currentVersion", nativeQuery = true)
     void upvoteNewsItem(@Param("newsId") Long newsId, @Param("currentVersion") Long currentVersion);
 
-
     @Query("SELECT n FROM NewsItem n " +
             "LEFT JOIN n.comments c " +
             "WHERE LOWER(n.title) LIKE %:keyword% " +
@@ -25,7 +24,7 @@ public interface NewsItemRepository extends JpaRepository<NewsItem, Long> {
     Page<NewsItem> searchNewsByTitleOrderedBySumOfVotesAndCommentsDesc(
             @Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT n FROM NewsItem n LEFT JOIN n.comments c WHERE n.createdAt > :dateTime " +
+    @Query("SELECT n FROM NewsItem n LEFT JOIN n.comments c WHERE n.createdAt >= :dateTime " +
             "GROUP BY n.id " +
             "ORDER BY SUM(n.votes) + COUNT(c) DESC")
     Page<NewsItem> findAllNewsAfterOrderedBySumOfVotesAndCommentsDesc(

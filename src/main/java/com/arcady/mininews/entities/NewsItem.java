@@ -21,6 +21,6 @@ public class NewsItem {
     private long votes;
     private ZonedDateTime createdAt;
 
-    @OneToMany(mappedBy = "newsItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newsItem", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 }

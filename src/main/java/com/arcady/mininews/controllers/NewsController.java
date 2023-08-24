@@ -1,7 +1,9 @@
 package com.arcady.mininews.controllers;
 
 import com.arcady.mininews.dto.CommentRequest;
+import com.arcady.mininews.dto.ListView;
 import com.arcady.mininews.dto.NewsItemRequest;
+import com.arcady.mininews.dto.NewsItemView;
 import com.arcady.mininews.entities.Comment;
 import com.arcady.mininews.entities.NewsItem;
 import com.arcady.mininews.services.NewsService;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Clock;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/news", produces = "application/json")
@@ -23,12 +27,14 @@ public class NewsController {
 
     // --- public --- //
     @GetMapping("/today")
-    public ResponseEntity<Page<NewsItem>> getNewsOfToday(
+    public ResponseEntity<ListView> getNewsOfToday(
             @RequestParam(defaultValue = "0") int page
     ) {
         final ZonedDateTime start = ZonedDateTime.now().withHour(0).withMinute(0).withSecond(0);
         Page<NewsItem> newsPage = newsService.getNewsAfterDate(start, page);
-        return ResponseEntity.ok(newsPage);
+        final List<NewsItemView> newsItemViews = newsPage.getContent().stream().map(NewsItemView::toView).collect(Collectors.toList());
+        final ListView view = ListView.toView(newsItemViews, newsPage.getSize(), newsPage.getTotalPages());
+        return ResponseEntity.ok(view);
     }
 
     @GetMapping("/yesterday")

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Entity
@@ -14,7 +14,7 @@ public class Comment {
     private Long id;
 
     private String text;
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "news_item_id")

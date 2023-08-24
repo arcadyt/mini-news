@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class NewsService {
 
         Comment comment = new Comment();
         comment.setText(request.getText());
-        comment.setCreatedAt(LocalDateTime.now());
+        comment.setCreatedAt(ZonedDateTime.now());
         comment.setNewsItem(newsItem);
 
         return commentRepository.save(comment);
